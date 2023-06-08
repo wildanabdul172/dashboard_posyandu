@@ -10,7 +10,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import { useEffect, useState } from 'react';
 
-export default function AddForm() {
+export default function EditForm() {
   const { id } = useRouter().query;
 
   const [successMsg, setSuccessMsg] = useState('');
@@ -28,7 +28,6 @@ export default function AddForm() {
       .get(`http://localhost:4400/api/master-data/children/${id}`)
       .then((res) => {
         const data = res.data;
-        console.log(data)
         setSaveName(data[0].name);
         setSaveGender(data[0].gender);
         setSaveAddress(data[0].address);
@@ -39,8 +38,6 @@ export default function AddForm() {
       .catch((error) => {
         console.log(error.message);
       });
-    console.log();
-
   }, []);
 
   const nameHandler = (e) => {

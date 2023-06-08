@@ -2,11 +2,12 @@ import Head from 'next/head';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import { Grid, Container } from '@mui/material';
 import Footer from '@/components/Footer';
-import EditForm from '@/content/Management/Children/EditChildrenForm';
+import HistoryPage from '@/content/Management/Children/PageHistory';
 import PageHeaderHistoryPost from '@/content/Management/Children/PageHeaderHistory';
 import SidebarLayout from '@/layouts/SidebarLayout';
+import TasksAnalytics from '@/content/Dashboards/Tasks/TasksAnalytics';
 
-function HistoryPost() {
+function HistoryChildren() {
   return (
     <>
       <Head>
@@ -24,7 +25,8 @@ function HistoryPost() {
           spacing={3}
         >
           <Grid item xs={12}>
-            <EditForm/>
+            {/* <TasksAnalytics /> */}
+            <HistoryPage />
           </Grid>
         </Grid>
       </Container>
@@ -33,8 +35,6 @@ function HistoryPost() {
   );
 }
 
-HistoryPost.getLayout = (page) => (
-  <SidebarLayout>{page}</SidebarLayout>
-);
+HistoryChildren.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
 
-export default HistoryPost;
+export default HistoryChildren;
