@@ -1,8 +1,10 @@
 import { Typography, Button, Grid } from '@mui/material';
 import NextLink from 'next/link';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+import { useRouter } from 'next/router';
 
 function PageHeaderHistoryPost() {
+  const { id } = useRouter().query;
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
@@ -11,7 +13,7 @@ function PageHeaderHistoryPost() {
         </Typography>
       </Grid>
       <Grid item>
-      <NextLink href="/management/Children/addChildren" passHref>
+      <NextLink href={`/management/Children/historyChildren/${id}/addHistory`} passHref>
         <Button
           sx={{ mt: { xs: 2, md: 0 } }}
           variant="contained"

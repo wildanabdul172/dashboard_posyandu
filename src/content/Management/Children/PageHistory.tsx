@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { format } from 'date-fns';
+import NextLink from 'next/link';
+import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 
 export default function HistoryPage() {
   const { id } = useRouter().query;
@@ -30,15 +32,20 @@ export default function HistoryPage() {
         console.log(error.message);
       });
 
-    axios
+      axios
       .get(`http://localhost:4400/api/master-data/children/${id}/healthRecords`)
       .then((res) => {
         const data = res.data;
-        setHealthRecords(data);
+        const sortedData = data.sort(
+          (a, b) => new Date(b.date_of_record).getTime() - new Date(a.date_of_record).getTime()
+        );
+        setHealthRecords(sortedData);
       })
       .catch((error) => {
         console.log(error.message);
       });
+    
+    
   }, []);
   return (
     <>
@@ -46,86 +53,94 @@ export default function HistoryPage() {
         {saveName}
       </Typography>
       <Grid container spacing={2}>
-        {healthRecords.map((record) => (
-          <Grid item key={record.record_id}>
-            <Card sx={{ minWidth: 350, minHeight: 250 }}>
-              <CardContent
-                sx={{
-                  display: 'grid',
-                  gridTemplateRows: 'repeat(auto-fill, minmax(0, 1fr))',
-                  gap: 2
-                }}
-              >
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
+        {healthRecords
+          .sort(
+            (a, b) =>
+              new Date(b.date_of_record).getTime() -
+              new Date(a.date_of_record).getTime()
+          )
+          .map((record) => (
+            <Grid item key={record.record_id}>
+              <Card sx={{ minWidth: 350, minHeight: 250 }}>
+                <CardContent
+                  sx={{
+                    display: 'grid',
+                    gridTemplateRows: 'repeat(auto-fill, minmax(0, 1fr))',
+                    gap: 2
+                  }}
                 >
-                  <Typography variant="h4" component="div">
-                    Tanggal
-                  </Typography>
-                  <Typography variant="body1">
-                    {format(new Date(record.date_of_record), 'MMMM dd yyyy')}
-                  </Typography>
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="h4" component="div">
-                    Tinggi Badan
-                  </Typography>
-                  <Typography variant="body1">{record.height}</Typography>
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="h4" component="div">
-                    Berat Badan
-                  </Typography>
-                  <Typography variant="body1">{record.weight}</Typography>
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="h4" component="div">
-                    Lingkar Kepala
-                  </Typography>
-                  <Typography variant="body1">
-                    {record.head_circumference}
-                  </Typography>
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="h4" component="div">
-                    Lingkar Lengan
-                  </Typography>
-                  <Typography variant="body1">
-                    {record.arm_circumference}
-                  </Typography>
-                </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="h4" component="div">
-                    Imunisasi
-                  </Typography>
-                  <Typography variant="body1">{record.immunization}</Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography variant="h4" component="div">
+                      Tanggal
+                    </Typography>
+                    <Typography variant="body1">
+                      {format(new Date(record.date_of_record), 'dd MMMM yyyy')}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography variant="h4" component="div">
+                      Tinggi Badan
+                    </Typography>
+                    <Typography variant="body1">{record.height} cm</Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography variant="h4" component="div">
+                      Berat Badan
+                    </Typography>
+                    <Typography variant="body1">{record.weight} kg</Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography variant="h4" component="div">
+                      Lingkar Kepala
+                    </Typography>
+                    <Typography variant="body1">
+                      {record.head_circumference} cm
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography variant="h4" component="div">
+                      Lingkar Lengan
+                    </Typography>
+                    <Typography variant="body1">
+                      {record.arm_circumference} cm
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography variant="h4" component="div">
+                      Imunisasi
+                    </Typography>
+                    <Typography variant="body1">
+                      {record.immunization}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
       </Grid>
     </>
   );

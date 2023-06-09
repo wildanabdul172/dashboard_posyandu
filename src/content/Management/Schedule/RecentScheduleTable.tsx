@@ -237,7 +237,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ scheduleList }) => {
                     >
                       {format(
                         new Date(scheduleList.activity_date),
-                        'MMMM dd yyyy'
+                        'dd MMMM yyyy'
                       )}
                     </Typography>
                   </TableCell>

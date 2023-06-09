@@ -227,7 +227,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ postList }) => {
                       noWrap
                       align='center'
                     >
-                      {format(new Date(postList.create_at), 'MMMM dd yyyy')}
+                      {format(new Date(postList.create_at), 'dd MMMM yyyy')}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

@@ -77,12 +77,14 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ childrenList }) => {
       .get('http://localhost:4400/api/master-data/children')
       .then((res) => {
         const data = res.data;
-        setChildrenList(data);
+        const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
+        setChildrenList(sortedData);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
+  
 
   useEffect(() => {
     getScheduleList();
@@ -100,29 +102,6 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ childrenList }) => {
         console.log(error);
       });
   };
-
-  // const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-  //   let value = null;
-
-  //   if (e.target.value !== 'all') {
-  //     value = e.target.value;
-  //   }
-
-  //   setFilters((prevFilters) => ({
-  //     ...prevFilters,
-  //     status: value
-  //   }));
-  // };
-
-  // const handleSelectAllCryptoOrders = (
-  //   event: ChangeEvent<HTMLInputElement>
-  // ): void => {
-  //   setSelectedCryptoOrders(
-  //     event.target.checked
-  //       ? childrenList.map((childrenList) => childrenList.child_id)
-  //       : []
-  //   );
-  // };
 
   const handleSelectOneCryptoOrder = (
     _event: ChangeEvent<HTMLInputElement>,
