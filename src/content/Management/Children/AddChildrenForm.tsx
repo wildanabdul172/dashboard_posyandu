@@ -89,7 +89,7 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Name"
+          label="Nama"
           variant="outlined"
           onChange={nameHandler}
         />
@@ -104,7 +104,7 @@ export default function AddForm() {
       >
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
-            label="Date of Birth"
+            label="Tanggal Lahir"
             value={selectedDate}
             onChange={dateHandler}
             renderInput={(params) => (
@@ -128,7 +128,7 @@ export default function AddForm() {
     >
       <TextField
         id="outlined-basic"
-        label="Gender"
+        label="Jenis Kelamin"
         variant="outlined"
         select
         value={saveGender}
@@ -148,7 +148,7 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Address "
+          label="Alamat "
           variant="outlined"
           onChange={addressHandler}
         />
@@ -163,7 +163,7 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Parent Name"
+          label="Nama Orang Tua"
           variant="outlined"
           onChange={parentNameHandler}
         />
@@ -178,7 +178,7 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Parent Phone Number"
+          label="Nomor Telepon Orang Tua"
           variant="outlined"
           onChange={parentNumberHandler}
         />
@@ -186,7 +186,7 @@ export default function AddForm() {
       <Box
         component="form"
         sx={{
-          '& > :not(style)': { m: 1, width: '20ch' }
+          '& > :not(style)': { m: 1, width: '25ch' }
         }}
         noValidate
         autoComplete="off"
@@ -197,7 +197,7 @@ export default function AddForm() {
           startIcon={<AddTwoToneIcon fontSize="small" />}
           onClick={saveDataHandler}
         >
-          Add Children
+          Tambah Data Anak
         </Button>
       </Box>
     </>

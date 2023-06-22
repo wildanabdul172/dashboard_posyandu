@@ -1,21 +1,36 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import { useState } from 'react';
-import router from 'next/router';
-import axios from 'axios';
+import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import TimePicker from '@mui/lab/TimePicker';
+import MenuItem from '@mui/material/MenuItem';
+import axios from 'axios';
+import router from 'next/router';
 
 export default function AddForm() {
   const [saveActivityName, setSaveActivityName] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [saveLocation, setSaveLocation] = useState('');
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState('');
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  const fetchLocations = async () => {
+    try {
+      const response = await axios.get('http://localhost:4400/api/master-data/posyandu');
+      const data = response.data;
+      setLocations(data);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    }
+  };
 
   const titleHandler = (e) => {
     const title = e.target.value;
@@ -27,13 +42,12 @@ export default function AddForm() {
   };
 
   const timeHandler = (time) => {
-    console.log(time)
     setSelectedTime(time);
   };
 
   const locationHandler = (e) => {
-    const location = e.target.value;
-    setSaveLocation(location);
+    const locationId = e.target.value;
+    setSelectedLocation(locationId);
   };
 
   const saveDataHandler = () => {
@@ -41,11 +55,9 @@ export default function AddForm() {
       activity_name: saveActivityName,
       activity_date: selectedDate,
       activity_time: selectedTime,
-      activity_location: saveLocation
+      activity_location: selectedLocation
     };
-
     let url = 'http://localhost:4400/api/master-data/activities';
-
     axios
       .post(url, requestData)
       .then((res) => {
@@ -74,7 +86,7 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Activity Title "
+          label="Activity Title"
           variant="outlined"
           onChange={titleHandler}
         />
@@ -142,10 +154,21 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Location "
+          label="Location"
           variant="outlined"
           onChange={locationHandler}
-        />
+          select
+          value={selectedLocation}
+        >
+          <MenuItem value="" disabled>
+            Select Location
+          </MenuItem>
+          {locations.map((location) => (
+            <MenuItem key={location.posyandu_id} value={location.posyandu_id}>
+              {location.posyandu_name}
+            </MenuItem>
+          ))}
+        </TextField>
       </Box>
       <Box
         component="form"

@@ -198,10 +198,10 @@ function SidebarMenu() {
                 </NextLink>
               </ListItem>
               <ListItem component="div">
-                <NextLink href="/status/coming-soon" passHref>
+                <NextLink href="/management/Queue" passHref>
                   <Button
                     className={
-                      currentRoute === '/status/coming-soon' ? 'active' : ''
+                      currentRoute === '/management/Queue' ? 'active' : ''
                     }
                     disableRipple
                     component="a"
@@ -255,7 +255,7 @@ function SidebarMenu() {
                     onClick={closeSidebar}
                     startIcon={<NewspaperIcon />}
                   >
-                    Post List
+                    Pengolahan Artikel
                   </Button>
                 </NextLink>
               </ListItem>

@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import {
@@ -17,12 +17,13 @@ import {
   DialogTitle,
   CardContent,
   Button,
-  Avatar
+  Avatar,
+  TextField
 } from '@mui/material';
 
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { PostedStatus, PostListModel } from '@/models/postListModel';
+import { PostListModel } from '@/models/postListModel';
 import React from 'react';
 import axios from 'axios';
 import router from 'next/router';
@@ -33,51 +34,37 @@ interface RecentOrdersTableProps {
 }
 
 interface Filters {
-  status?: PostedStatus;
+  keyword: string;
 }
 
-const applyFilters = (
-  postList: PostListModel[],
-  filters: Filters
-): PostListModel[] => {
-  return postList.filter((postList) => {
-    let matches = true;
+const sortPostListByDateTime = (postList: PostListModel[]) => {
+  return postList.sort((a, b) => {
+    const dateTimeA = new Date(a.create_at);
+    const dateTimeB = new Date(b.create_at);
 
-    if (filters.status && postList.status !== filters.status) {
-      matches = false;
-    }
+    if (dateTimeA > dateTimeB) return -1;
+    if (dateTimeA < dateTimeB) return 1;
 
-    return matches;
+    return 0;
   });
 };
 
-const applyPagination = (
-  postList: PostListModel[],
-  page: number,
-  limit: number
-): PostListModel[] => {
-  return postList.slice(page * limit, page * limit + limit);
-};
 
-const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ postList }) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
-    []
-  );
-  const selectedBulkActions = selectedCryptoOrders.length > 0;
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    status: null
-  });
+const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ }) => {
   const [articleList, setArticleList] = useState([]);
+  const [filters, setFilters] = useState<Filters>({
+    keyword: ''
+  });
 
   const getArticleList = () => {
     axios
       .get('http://localhost:4400/api/master-data/articles')
       .then((res) => {
         const data = res.data;
-        setArticleList(data);
-      }).catch((error) => {
+        const sortedPostList = sortPostListByDateTime(data);
+        setArticleList(sortedPostList);
+      })
+      .catch((error) => {
         console.log(error.message);
       });
   };
@@ -98,203 +85,180 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ postList }) => {
         console.log(error);
       });
   };
-  
-  const handleSelectAllCryptoOrders = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedCryptoOrders(
-      event.target.checked ? postList.map((postList) => postList.id) : []
-    );
-  };
 
-  const handleSelectOneCryptoOrder = (
-    _event: ChangeEvent<HTMLInputElement>,
-    cryptoOrderId: string
-  ): void => {
-    if (!selectedCryptoOrders.includes(cryptoOrderId)) {
-      setSelectedCryptoOrders((prevSelected) => [
-        ...prevSelected,
-        cryptoOrderId
-      ]);
-    } else {
-      setSelectedCryptoOrders((prevSelected) =>
-        prevSelected.filter((id) => id !== cryptoOrderId)
-      );
-    }
-  };
-
-  const handlePageChange = (_event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const filteredCryptoOrders = applyFilters(postList, filters);
-  const paginatedCryptoOrders = applyPagination(
-    filteredCryptoOrders,
-    page,
-    limit
-  );
-  const selectedSomeCryptoOrders =
-    selectedCryptoOrders.length > 0 &&
-    selectedCryptoOrders.length < postList.length;
-  const selectedAllCryptoOrders =
-    selectedCryptoOrders.length === postList.length;
   const theme = useTheme();
 
-  const [modalOpen, setModalOpen] = useState(false)
-  const [modalItem, setModalItem] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalItem, setModalItem] = useState(null);
 
-  const handleModalOpen = item => {
-    setModalItem(item)
-    setModalOpen(true)
-  }
+  const handleModalOpen = (item) => {
+    setModalItem(item);
+    setModalOpen(true);
+  };
 
   const handleModalClose = () => {
-    setModalItem(null)
-    setModalOpen(false)
-  }
+    setModalItem(null);
+    setModalOpen(false);
+  };
+
+  const handleSearchChange = (event) => {
+    const { value } = event.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      keyword: value
+    }));
+  };
+
+  const filteredArticleList = articleList.filter((postList) =>
+    postList.title.toLowerCase().includes(filters.keyword.toLowerCase())
+  );
 
   return (
     <Card>
-      <TableContainer >
-        <Table >
+      <CardContent>
+        <TextField
+          label="Search"
+          variant="outlined"
+          size="small"
+          value={filters.keyword}
+          onChange={handleSearchChange}
+          sx={{ width: 200 }}
+        />
+      </CardContent>
+      <TableContainer>
+        <Table>
           <TableHead>
             <TableRow>
-              <TableCell align='center'>No</TableCell>
-              <TableCell align='center'>Post Title</TableCell>
-              <TableCell align='center'>Content</TableCell>
-              <TableCell align='center'>Create at</TableCell>
-              <TableCell align="center">image</TableCell>
+              <TableCell align="center">No</TableCell>
+              <TableCell align="center">Judul Artikel</TableCell>
+              <TableCell align="center">Konten</TableCell>
+              <TableCell align="center">Tanggal Dibuat</TableCell>
+              <TableCell align="center">Gambar</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {articleList.map((postList, index) => {
-              for (var i = 0; i < articleList.length; i++) {
-                i;
-              }
-              return (
-                <TableRow
-                  hover
-                  key={postList.id}
-                >
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                      key={postList.id}
-                      align='center'
-                    >
-                      {index + 1}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                      align='center'
-                    >
-                      {postList.title}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                      align='center'
-                    >
-                      {postList.content.substring(0, 22)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                      align='center'
-                    >
-                      {format(new Date(postList.create_at), 'dd MMMM yyyy')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
+            {filteredArticleList.map((postList, index) => (
+              <TableRow hover key={postList.id}>
+                <TableCell>
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    color="text.primary"
+                    gutterBottom
+                    noWrap
+                    align="center"
+                  >
+                    {index + 1}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    color="text.primary"
+                    gutterBottom
+                    noWrap
+                    align="center"
+                  >
+                    {postList.title}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    color="text.primary"
+                    gutterBottom
+                    noWrap
+                    align="center"
+                  >
+                    {postList.content.substring(0, 22)}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    color="text.primary"
+                    gutterBottom
+                    noWrap
+                    align="center"
+                  >
+                    {format(new Date(postList.create_at), 'dd MMMM yyyy')}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
                   <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Avatar variant="rounded" alt={postList.title} src={`http://localhost:4400/${postList.image}`} sx={{ width: 90, height: 90 }}/>
+                    <Avatar
+                      variant="rounded"
+                      alt={postList.title}
+                      src={`http://localhost:4400/${postList.image}`}
+                      sx={{ width: 90, height: 90 }}
+                    />
                   </CardContent>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Tooltip title="Edit Order" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': {
-                            background: theme.colors.primary.lighter
-                          },
-                          color: theme.palette.primary.main
-                        }}
-                        color="inherit"
-                        size="small"
-                        onClick={ () => { return router.push(`/management/PostList/editPost/${postList.id}`)}}
-                      >
-                        <EditTwoToneIcon fontSize="medium" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete Order" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': { background: theme.colors.error.lighter },
-                          color: theme.palette.error.main
-                        }}
-                        color="inherit"
-                        size="small"
-                        onClick={() => handleModalOpen(postList)}
-                        key={postList.id}
-                      >
-                        <DeleteTwoToneIcon fontSize="medium" />
-                      </IconButton>
-                    </Tooltip>
-                    {modalItem && (
-                      <>
-                        <Dialog open={modalOpen} onClose={handleModalClose}>
-                          <DialogTitle align="center" fontSize={'18px'}>
-                            Are you sure want to delete ?
-                          </DialogTitle>
-                          <CardContent>
-                            <Button
-                              sx={{ margin: 3, paddingX: 4 }}
-                              variant="contained"
-                              color="error"
-                              onClick={() => deletePost(modalItem.id)}
-                            >
-                              Yes
-                            </Button>
-                            <Button
-                              sx={{ margin: 3, paddingX: 4 }}
-                              variant="contained"
-                              onClick={handleModalClose}
-                            >
-                              No
-                            </Button>
-                          </CardContent>
-                        </Dialog>
-                      </>
-                    )}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                </TableCell>
+                <TableCell align="center">
+                  <Tooltip title="Edit Order" arrow>
+                    <IconButton
+                      sx={{
+                        '&:hover': {
+                          background: theme.colors.primary.lighter
+                        },
+                        color: theme.palette.primary.main
+                      }}
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        return router.push(`/management/PostList/editPost/${postList.id}`);
+                      }}
+                    >
+                      <EditTwoToneIcon fontSize="medium" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Order" arrow>
+                    <IconButton
+                      sx={{
+                        '&:hover': { background: theme.colors.error.lighter },
+                        color: theme.palette.error.main
+                      }}
+                      color="inherit"
+                      size="small"
+                      onClick={() => handleModalOpen(postList)}
+                      key={postList.id}
+                    >
+                      <DeleteTwoToneIcon fontSize="medium" />
+                    </IconButton>
+                  </Tooltip>
+                  {modalItem && (
+                    <>
+                      <Dialog open={modalOpen} onClose={handleModalClose}>
+                        <DialogTitle align="center" fontSize={'18px'}>
+                          Are you sure want to delete ?
+                        </DialogTitle>
+                        <CardContent>
+                          <Button
+                            sx={{ margin: 3, paddingX: 4 }}
+                            variant="contained"
+                            color="error"
+                            onClick={() => deletePost(modalItem.id)}
+                          >
+                            Yes
+                          </Button>
+                          <Button
+                            sx={{ margin: 3, paddingX: 4 }}
+                            variant="contained"
+                            onClick={handleModalClose}
+                          >
+                            No
+                          </Button>
+                        </CardContent>
+                      </Dialog>
+                    </>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

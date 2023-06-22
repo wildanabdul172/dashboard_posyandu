@@ -7,7 +7,7 @@ function PageHeaderPost() {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          Schedule List Posyandu
+          Pengolahan Data Jadwal
         </Typography>
       </Grid>
       <Grid item>
@@ -17,7 +17,7 @@ function PageHeaderPost() {
           variant="contained"
           startIcon={<AddTwoToneIcon fontSize="small" />}
         >
-          Add Schedule
+          Tambah Jadwal
         </Button>
       </NextLink>
       </Grid>

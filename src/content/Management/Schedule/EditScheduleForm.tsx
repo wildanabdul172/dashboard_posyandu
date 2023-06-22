@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Alert, Button, Stack } from '@mui/material';
+import { Alert, Button, MenuItem, Stack } from '@mui/material';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import router, { useRouter } from 'next/router';
 import axios from 'axios';
@@ -20,7 +20,22 @@ export default function AddForm() {
   const [saveActivityName, setSaveActivityName] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [saveLocation, setSaveLocation] = useState('');
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState('');
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  const fetchLocations = async () => {
+    try {
+      const response = await axios.get('http://localhost:4400/api/master-data/posyandu');
+      const data = response.data;
+      setLocations(data);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -30,7 +45,7 @@ export default function AddForm() {
         setSaveActivityName(data[0].activity_name);
         setSelectedDate(data[0].activity_date);
         setSelectedTime(data[0].activity_time);
-        setSaveLocation(data[0].activity_location);
+        setSelectedLocation(data[0].activity_location);
       })
       .catch((error) => {
         console.log(error.message);
@@ -54,8 +69,8 @@ export default function AddForm() {
   };
 
   const locationHandler = (e) => {
-    const location = e.target.value;
-    setSaveLocation(location);
+    const locationId = e.target.value;
+    setSelectedLocation(locationId);
   };
 
   const saveDataHandler = () => {
@@ -63,7 +78,7 @@ export default function AddForm() {
       activity_name: saveActivityName,
       activity_date: selectedDate,
       activity_time: selectedTime,
-      activity_location: saveLocation
+      activity_location: selectedLocation
     };
 
     let url = `http://localhost:4400/api/master-data/activities/${id}`;
@@ -185,11 +200,21 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Location "
+          label="Location"
           variant="outlined"
           onChange={locationHandler}
-          value={saveLocation }
-        />
+          select
+          value={selectedLocation}
+        >
+          <MenuItem value="" disabled>
+            Select Location
+          </MenuItem>
+          {locations.map((location) => (
+            <MenuItem key={location.posyandu_id} value={location.posyandu_id}>
+              {location.posyandu_name}
+            </MenuItem>
+          ))}
+        </TextField>
       </Box>
       <Box
         component="form"

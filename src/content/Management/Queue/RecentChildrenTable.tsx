@@ -116,12 +116,12 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ }) => {
             <TableHead>
               <TableRow>
                 <TableCell align="center">No</TableCell>
-                <TableCell align="center">Nama</TableCell>
-                <TableCell align="center">Tanggal Lahir</TableCell>
-                <TableCell align="center">Jenis Kelamin</TableCell>
-                <TableCell align="center">Alamat</TableCell>
-                <TableCell align="center">Nama Orang Tua</TableCell>
-                <TableCell align="center">Nomor Telepon Orang Tua</TableCell>
+                <TableCell align="center">Children Name</TableCell>
+                <TableCell align="center">Date of Birth</TableCell>
+                <TableCell align="center">Gender</TableCell>
+                <TableCell align="center">Address</TableCell>
+                <TableCell align="center">Parent Name</TableCell>
+                <TableCell align="center">Parent Phone Number</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
