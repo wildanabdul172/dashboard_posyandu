@@ -248,7 +248,7 @@ function TasksAnalytics() {
           </Card>
         </Grid>
       </Grid>
-      <Box>
+      {/* <Box>
         <Box
           mb={2}
           display="flex"
@@ -324,7 +324,7 @@ function TasksAnalytics() {
           type="bar"
           height={270}
         />
-      </Box>
+      </Box> */}
     </>
   );
 }

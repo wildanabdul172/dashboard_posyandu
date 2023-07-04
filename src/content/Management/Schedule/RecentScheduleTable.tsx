@@ -1,8 +1,8 @@
 import { FC, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
 import moment from 'moment';
 import 'moment-timezone';
+import 'moment/locale/id';
 
 import {
   Tooltip,
@@ -65,6 +65,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({}) => {
         const data = res.data;
         const sortedScheduleList = sortScheduleListByDateTime(data);
         setActivitiesList(sortedScheduleList);
+        console.log(sortedScheduleList)
       })
       .catch((error) => {
         console.log(error.message);
@@ -178,10 +179,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({}) => {
                     noWrap
                     align="center"
                   >
-                    {format(
-                      new Date(scheduleList.activity_date),
-                      'dd MMMM yyyy'
-                    )}
+                    {moment(scheduleList.activity_date).locale('id').format('dddd, DD MMMM yyyy')}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">

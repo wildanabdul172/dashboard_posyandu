@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import moment from 'moment';
 import {
   Tooltip,
   Card,
@@ -27,6 +27,7 @@ import { PostListModel } from '@/models/postListModel';
 import React from 'react';
 import axios from 'axios';
 import router from 'next/router';
+import 'moment/locale/id';
 
 interface RecentOrdersTableProps {
   className?: string;
@@ -185,7 +186,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ }) => {
                     noWrap
                     align="center"
                   >
-                    {format(new Date(postList.create_at), 'dd MMMM yyyy')}
+                    {moment(postList.create_at).locale('id').format('dddd, DD MMMM yyyy')}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">

@@ -19,7 +19,7 @@ function PageHeaderHistoryPost() {
           variant="contained"
           startIcon={<AddTwoToneIcon fontSize="small" />}
         >
-          Add History
+          Tambah Tumbuh Kembang Anak
         </Button>
       </NextLink>
       </Grid>

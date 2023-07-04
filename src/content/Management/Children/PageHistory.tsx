@@ -11,9 +11,8 @@ import {
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { format } from 'date-fns';
-import NextLink from 'next/link';
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+import moment from 'moment';
+import 'moment/locale/id';
 
 export default function HistoryPage() {
   const { id } = useRouter().query;
@@ -78,7 +77,7 @@ export default function HistoryPage() {
                       Tanggal
                     </Typography>
                     <Typography variant="body1">
-                      {format(new Date(record.date_of_record), 'dd MMMM yyyy')}
+                    {moment(record.date_of_record).locale('id').format('dddd, DD MMMM yyyy')}
                     </Typography>
                   </Box>
                   <Box
@@ -89,7 +88,7 @@ export default function HistoryPage() {
                     <Typography variant="h4" component="div">
                       Tinggi Badan
                     </Typography>
-                    <Typography variant="body1">{record.height} cm</Typography>
+                    <Typography variant="body1">{record.height || record.height == null ? record.height : "-"} cm</Typography>
                   </Box>
                   <Box
                     display="flex"
@@ -99,7 +98,7 @@ export default function HistoryPage() {
                     <Typography variant="h4" component="div">
                       Berat Badan
                     </Typography>
-                    <Typography variant="body1">{record.weight} kg</Typography>
+                    <Typography variant="body1">{record.weight || record.weight == null ? record.weight : "-"} kg</Typography>
                   </Box>
                   <Box
                     display="flex"
@@ -110,7 +109,7 @@ export default function HistoryPage() {
                       Lingkar Kepala
                     </Typography>
                     <Typography variant="body1">
-                      {record.head_circumference} cm
+                      {record.head_circumference || record.head_circumference == null ? record.head_circumference : "-"} cm
                     </Typography>
                   </Box>
                   <Box
@@ -122,7 +121,7 @@ export default function HistoryPage() {
                       Lingkar Lengan
                     </Typography>
                     <Typography variant="body1">
-                      {record.arm_circumference} cm
+                      {record.arm_circumference || record.arm_circumference == null ? record.arm_circumference : "-"} cm
                     </Typography>
                   </Box>
                   <Box
@@ -134,7 +133,7 @@ export default function HistoryPage() {
                       Imunisasi
                     </Typography>
                     <Typography variant="body1">
-                      {record.immunization}
+                    {record.immunization || record.immunization == null ? record.immunization : "-"}
                     </Typography>
                   </Box>
                 </CardContent>

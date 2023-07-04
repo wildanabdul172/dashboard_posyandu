@@ -70,7 +70,7 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Article Title"
+          label="Judul Artikel"
           variant="outlined"
           onChange={titleHandler}
         />
@@ -86,7 +86,7 @@ export default function AddForm() {
         <TextField
           id="outlined-multiline-static"
           multiline
-          label="Article Content"
+          label="Konten Artikel"
           variant="outlined"
           onChange={contentHandler}
         />
@@ -112,7 +112,7 @@ export default function AddForm() {
         autoComplete="off"
       >
         <Button variant="contained" component="label">
-          Upload Image
+          Upload Gambar
           <input type="file" className="form-control" id="image" onChange={handleUploadChange} hidden required/>
         </Button>
       </Box>
@@ -130,7 +130,7 @@ export default function AddForm() {
           startIcon={<AddTwoToneIcon fontSize="small" />}
           onClick={saveDataHandler}
         >
-          Add Post
+          Tambah Artikel
         </Button>
       </Box>
     </>

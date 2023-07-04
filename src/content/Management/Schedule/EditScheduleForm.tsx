@@ -131,7 +131,7 @@ export default function AddForm() {
             </div>
         <TextField
           id="outlined-basic"
-          label="Activity Title "
+          label="Nama Aktivitas"
           variant="outlined"
           onChange={titleHandler}
           value={saveActivityName}
@@ -147,7 +147,7 @@ export default function AddForm() {
       >
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
-            label="Activity Date"
+            label="Tanggal Aktivitas"
             value={selectedDate}
             onChange={dateHandler}
             renderInput={(params) => (
@@ -174,7 +174,7 @@ export default function AddForm() {
       >
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <TimePicker
-            label="Article Time"
+            label="Waktu Aktivitas"
             value={selectedTime}
             onChange={timeHandler}
             renderInput={(params) => (
@@ -200,7 +200,7 @@ export default function AddForm() {
       >
         <TextField
           id="outlined-basic"
-          label="Location"
+          label="Lokasi"
           variant="outlined"
           onChange={locationHandler}
           select
@@ -230,7 +230,7 @@ export default function AddForm() {
           startIcon={<AddTwoToneIcon fontSize="small" />}
           onClick={saveDataHandler}
         >
-          Edit Schedule
+          Edit Jadwal
         </Button>
       </Box>
     </>

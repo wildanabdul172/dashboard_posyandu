@@ -28,6 +28,8 @@ import React from 'react';
 import axios from 'axios';
 import router from 'next/router';
 import { ChildrenListModel } from '@/models/childrenListModel';
+import moment from 'moment';
+import 'moment/locale/id';
 
 interface RecentOrdersTableProps {
   className?: string;
@@ -163,10 +165,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ }) => {
                         noWrap
                         align="center"
                       >
-                        {format(
-                          new Date(childrenList.date_of_birth),
-                          'MMMM dd yyyy'
-                        )}
+                        {moment(childrenList.date_of_birth).locale('id').format('dddd, DD MMMM yyyy')}
                       </Typography>
                     </TableCell>
                     <TableCell>

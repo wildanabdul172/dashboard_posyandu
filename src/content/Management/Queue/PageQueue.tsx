@@ -24,6 +24,7 @@ export default function QueuePage() {
       .get(`http://localhost:4400/api/master-data/queue`)
       .then((res) => {
         const data = res.data;
+        console.log(data)
         const sortedData = data.sort(
           (a, b) =>
             new Date(b.date_of_record).getTime() -
@@ -42,7 +43,7 @@ export default function QueuePage() {
         status: 'Completed'
       })
       .then((res) => {
-        // Mengupdate data antrian setelah status berhasil diperbarui
+        
         const updatedQueueRecords = queueRecords.map((record) => {
           if (record.queue_id === queueId) {
             return {
@@ -178,7 +179,7 @@ export default function QueuePage() {
                     href={`/management/Children/historyChildren/${record.child_id}/addHistory`}
                     passHref
                   >
-                    <Button variant="contained" color="secondary" sx={{ mr: 1 }}>
+                    <Button variant="contained" color="secondary" sx={{ mr: 1 }} disabled={record.status === 'Completed'}>
                       Riwayat
                     </Button>
                   </NextLink>
@@ -187,6 +188,7 @@ export default function QueuePage() {
                     color="success"
                     onClick={() => handleModalOpen(record)}
                     key={record.queue_id}
+                    disabled={record.status === 'Completed'}
                   >
                     Selesai
                   </Button>

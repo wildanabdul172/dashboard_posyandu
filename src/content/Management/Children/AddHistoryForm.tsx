@@ -73,7 +73,7 @@ export default function AddForm() {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           console.log('Data saved successfully');
-          router.push(`/management/Children/historyChildren/${id}`);
+          router.push(`/management/Queue`);
         } else {
           throw new Error('Failed to add or edit Child data!');
         }
@@ -200,7 +200,7 @@ export default function AddForm() {
           startIcon={<AddTwoToneIcon fontSize="small" />}
           onClick={saveDataHandler}
         >
-          Add History
+          Tambah Tumbuh Kembang Anak
         </Button>
       </Box>
     </>

@@ -99,7 +99,7 @@ export default function EditForm() {
         <TextField
           id="outlined-multiline-static"
           multiline
-          label="Article Title"
+          label="Judul Artikel"
           variant="outlined"
           onChange={titleHandler}
           value={saveTitle}
@@ -116,7 +116,7 @@ export default function EditForm() {
         <TextField
           id="outlined-multiline-static"
           multiline
-          label="Article Content"
+          label="Konten Artikel"
           variant="outlined"
           onChange={contentHandler}
           value={saveContent}
@@ -158,7 +158,7 @@ export default function EditForm() {
           startIcon={<AddTwoToneIcon fontSize="small" />}
           onClick={saveDataHandler}
         >
-          Edit Post
+          Edit Artikel
         </Button>
       </Box>
     </>
