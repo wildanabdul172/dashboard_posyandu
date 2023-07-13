@@ -21,7 +21,7 @@ export default function QueuePage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4400/api/master-data/queue`)
+      .get(`http://localhost:4400/api/master-data/queue-date`)
       .then((res) => {
         const data = res.data;
         console.log(data)
